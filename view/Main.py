@@ -1,7 +1,7 @@
 import sys
 
-from PyQt6.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout, QTableView, QHBoxLayout,
-                             QPushButton, QLabel)
+from PyQt6.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout
+                             )
 
 from BotonesArriba import BotonesArriba
 from labelSpartan import LabelSpartan
@@ -30,6 +30,7 @@ class Main(QMainWindow):
         #click de botones
         self.register.button_register.clicked.connect(self.insert_datos_db)
         self.login.login_button.clicked.connect(self.check_login)
+        self.botones_arriba.close.clicked.connect(QApplication.quit)
 
         #declaracion de base de datos
         self.base = ConexionBD("usuarios.db")
@@ -79,6 +80,7 @@ class Main(QMainWindow):
             )
             self.base.insertar_usuario(datos)
             print("Datos usuarios insertados correctamente")
+            self.limpiar_datos_registro()
         else:
             print("Rellene los campos faltantes")
 
@@ -91,6 +93,7 @@ class Main(QMainWindow):
         resultados = self.base.consultaConParametros(consultaSQL, (username, password))
         if self.aux_check_login(resultados):
             print("login perfecto, todo coincide")
+            self.limpiar_datos_login()
         else:
             print("usuario o contraseña incorrectos")
 
@@ -101,9 +104,6 @@ class Main(QMainWindow):
             return False
 
 
-
-
-
     def checkEmptyDatos(self):
         if self.register.txt_username.text() == "" or self.register.txt_password.text() == "" or self.register.txt_confirm_password.text() == "" or self.register.txt_forename.text() == "" or self.register.txt_surname.text() == "" or self.register.txt_secret_answer.text() == "" or self.register.combo_box_question.currentIndex() == -1 or  self.register.combo_box_question.currentIndex() == 0:
             return False
@@ -111,6 +111,20 @@ class Main(QMainWindow):
             return False
         else:
             return True
+
+
+    def limpiar_datos_registro(self):
+        self.register.txt_username.clear()
+        self.register.txt_password.clear()
+        self.register.txt_confirm_password.clear()
+        self.register.txt_forename.clear()
+        self.register.txt_surname.clear()
+        self.register.combo_box_question.setCurrentIndex(-1),
+        self.register.txt_secret_answer.clear()
+
+    def limpiar_datos_login(self):
+        self.login.text_username.clear()
+        self.login.text_password.clear()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

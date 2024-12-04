@@ -29,6 +29,7 @@ class Main(QMainWindow):
 
         #click de botones
         self.register.button_register.clicked.connect(self.insert_datos_db)
+        self.login.login_button.clicked.connect(self.check_login)
 
         #declaracion de base de datos
         self.base = ConexionBD("usuarios.db")
@@ -67,8 +68,49 @@ class Main(QMainWindow):
 
 
     def insert_datos_db(self):
-        print("aqui estoy")
+        if self.checkEmptyDatos():
+            datos = (
+                self.register.txt_username.text(),
+                self.register.txt_password.text(),
+                self.register.txt_forename.text(),
+                self.register.txt_surname.text(),
+                self.register.combo_box_question.currentText(),
+                self.register.txt_secret_answer.text()
+            )
+            self.base.insertar_usuario(datos)
+            print("Datos usuarios insertados correctamente")
+        else:
+            print("Rellene los campos faltantes")
 
+
+    def check_login(self):
+        username = self.login.text_username.text()
+        password = self.login.text_password.text()
+
+        consultaSQL = "SELECT username, password FROM usuarios where username = ? AND password = ?"
+        resultados = self.base.consultaConParametros(consultaSQL, (username, password))
+        if self.aux_check_login(resultados):
+            print("login perfecto, todo coincide")
+        else:
+            print("usuario o contraseña incorrectos")
+
+    def aux_check_login(self, resultados):
+        if resultados:
+            return True
+        else:
+            return False
+
+
+
+
+
+    def checkEmptyDatos(self):
+        if self.register.txt_username.text() == "" or self.register.txt_password.text() == "" or self.register.txt_confirm_password.text() == "" or self.register.txt_forename.text() == "" or self.register.txt_surname.text() == "" or self.register.txt_secret_answer.text() == "" or self.register.combo_box_question.currentIndex() == -1 or  self.register.combo_box_question.currentIndex() == 0:
+            return False
+        elif self.register.txt_password.text() != self.register.txt_confirm_password.text():
+            return False
+        else:
+            return True
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

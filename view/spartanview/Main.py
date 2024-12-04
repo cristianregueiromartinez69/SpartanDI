@@ -3,10 +3,10 @@ import sys
 from PyQt6.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout
                              )
 
-from BotonesArriba import BotonesArriba
+from view.spartanview.BotonesArriba import BotonesArriba
 from labelSpartan import LabelSpartan
 from Login import Login
-from About import About
+from view.spartanview.About import About
 from Register import  Register
 from PasswordStrength import PasswordStrength
 from model.conexionDB import ConexionBD

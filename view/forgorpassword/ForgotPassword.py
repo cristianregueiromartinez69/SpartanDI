@@ -2,26 +2,24 @@ import sys
 
 from PyQt6.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout
                              )
-from RestablecerContraseña import RestablecerContraseña
+from view.forgorpassword.RestablecerContraseña import RestablecerContraseña
 
 
 class ForgotPassword(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
+    def __init__(self, parent = None):
+        super().__init__(parent)
         self.setWindowTitle("Restaurar contraseña")
-        self.setFixedSize(400,400)
-
+        self.setFixedSize(400, 400)
         layout_principal = QVBoxLayout()
         restablecer_contraseña = RestablecerContraseña()
+        layout_principal.addWidget(restablecer_contraseña)
+        self.setLayout(layout_principal)
 
-        layout_principal.addLayout(restablecer_contraseña)
 
-        container = QWidget()
 
-        container.setLayout(layout_principal)
 
-        container.set
+    def cerrar_ventana(self):
+        self.hide()
 
 
 

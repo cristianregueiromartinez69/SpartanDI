@@ -2,15 +2,16 @@ import sys
 
 from PyQt6.QtWidgets import (QMainWindow, QApplication, QWidget, QVBoxLayout, QHBoxLayout
                              )
-
-from view.spartanview.BotonesArriba import BotonesArriba
+import faulthandler
+from BotonesArriba import BotonesArriba
 from labelSpartan import LabelSpartan
 from Login import Login
-from view.spartanview.About import About
+from About import About
 from Register import  Register
 from PasswordStrength import PasswordStrength
 from model.conexionDB import ConexionBD
 from model.DatosComboPreguntas import *
+from view.forgorpassword.ForgotPassword import ForgotPassword
 
 
 class Main(QMainWindow):
@@ -31,6 +32,7 @@ class Main(QMainWindow):
         self.register.button_register.clicked.connect(self.insert_datos_db)
         self.login.login_button.clicked.connect(self.check_login)
         self.botones_arriba.close.clicked.connect(QApplication.quit)
+        #self.login.forgot_button.clicked.connect(self.recordar_contraseña)
 
         #declaracion de base de datos
         self.base = ConexionBD("usuarios.db")
@@ -65,6 +67,8 @@ class Main(QMainWindow):
         container_principal.setLayout(layout_principal)
 
         self.setCentralWidget(container_principal)
+
+        self.ventanaSecundaria = None
         self.show()
 
 
@@ -113,6 +117,13 @@ class Main(QMainWindow):
             return True
 
 
+    def recordar_contraseña(self):
+        if self.ventanaSecundaria is None:
+            self.ventanaSecundaria = ForgotPassword(self)
+
+        self.ventanaSecundaria.exec()
+
+
     def limpiar_datos_registro(self):
         self.register.txt_username.clear()
         self.register.txt_password.clear()
@@ -127,6 +138,7 @@ class Main(QMainWindow):
         self.login.text_password.clear()
 
 if __name__ == "__main__":
+    faulthandler.enable()
     app = QApplication(sys.argv)
     window = Main()
     app.exec()
